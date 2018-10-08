@@ -1,5 +1,5 @@
 {
-    "name": "anchnet-tencentcloud-sdk-php",
+    "name": "anchnetpkg/tencentcloud-sdk-php",
     "description": "TencentCloudApi php sdk for anchnet",
     "type": "library",
     "homepage": "https://github.com/aaronwu/tencentcloud-sdk-php",
