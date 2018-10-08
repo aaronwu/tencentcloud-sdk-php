@@ -4,6 +4,7 @@ if (!defined('QCLOUDAPI_ROOT_PATH')) {
     define('QCLOUDAPI_ROOT_PATH', dirname(dirname(__FILE__)));
 }
 require_once QCLOUDAPI_ROOT_PATH . '/Common/Base.php';
+
 /**
  * QcloudApi_Module_Base
  * 模块基类
@@ -22,7 +23,7 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
      * url路径
      * @var string
      */
-    protected $_serverUri  = '/v2/index.php';
+    protected $_serverUri = '/v2/index.php';
 
     /**
      * $_secretId
@@ -30,6 +31,9 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
      * @var string
      */
     protected $_secretId = "";
+
+
+    protected $_ext = "";
 
     /**
      * $_secretKey
@@ -58,8 +62,9 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
      */
     public function __construct($config = array())
     {
-        if (!empty($config))
+        if (!empty($config)) {
             $this->setConfig($config);
+        }
     }
 
     /**
@@ -69,8 +74,9 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
      */
     public function setConfig($config)
     {
-        if (!is_array($config) || !count($config))
+        if (!is_array($config) || !count($config)) {
             return false;
+        }
 
         foreach ($config as $key => $val) {
             switch ($key) {
@@ -89,10 +95,12 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
                 case 'RequestMethod':
                     $this->setConfigRequestMethod($val);
                     break;
+                case 'Ext':
+                    $this->_ext = $val;
 
                 default:
                     ;
-                break;
+                    break;
             }
         }
 
@@ -168,8 +176,8 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
     /**
      * generateUrl
      * 生成请求的URL，不发起请求
-     * @param  string $name      接口方法名
-     * @param  array  $params 请求参数
+     * @param  string $name 接口方法名
+     * @param  array $params 请求参数
      * @return
      */
     public function generateUrl($name, $params)
@@ -179,31 +187,33 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
         $action = ucfirst($name);
         $params['Action'] = $action;
 
-        if (!isset($params['Region']))
+        if (!isset($params['Region'])) {
             $params['Region'] = $this->_defaultRegion;
+        }
 
-        return QcloudApi_Common_Request::generateUrl($params, $this->_secretId, $this->_secretKey, $this->_requestMethod,
-                                                   $this->_serverHost, $this->_serverUri);
+
+        return QcloudApi_Common_Request::generateUrl($params, $this->_secretId, $this->_secretKey,
+            $this->_requestMethod,
+            $this->_serverHost, $this->_serverUri);
     }
 
     /**
      * __call
      * 通过__call转发请求
-     * @param  string $name      方法名
-     * @param  array  $arguments 参数
+     * @param  string $name 方法名
+     * @param  array $arguments 参数
      * @return
      */
     public function __call($name, $arguments)
     {
         $response = $this->_dispatchRequest($name, $arguments);
-
         return $this->_dealResponse($response);
     }
 
     /**
      * _dispatchRequest
      * 发起接口请求
-     * @param  string $name      接口名
+     * @param  string $name 接口名
      * @param  array $arguments 接口参数
      * @return
      */
@@ -213,18 +223,22 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
 
         $params = array();
         if (is_array($arguments) && !empty($arguments)) {
-            $params = (array) $arguments[0];
+            $params = (array)$arguments[0];
         }
         $params['Action'] = $action;
 
-        if (!isset($params['Region']))
+        if (!isset($params['Region'])) {
             $params['Region'] = $this->_defaultRegion;
+        }
+        if (!empty($this->_ext)) {
+            foreach ($this->_ext as $item => $value) {
+                $params[$item] = $value;
+            }
+        }
 
         require_once QCLOUDAPI_ROOT_PATH . '/Common/Request.php';
-
         $response = QcloudApi_Common_Request::send($params, $this->_secretId, $this->_secretKey, $this->_requestMethod,
-                                                   $this->_serverHost, $this->_serverUri);
-
+            $this->_serverHost, $this->_serverUri);
         return $response;
     }
 
@@ -240,8 +254,8 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
             $this->setError("", 'request falied!');
             return false;
         }
-
-        if ($rawResponse['code']) {
+        if ((isset($rawResponse['code']) && $rawResponse['code'] != 0)
+            || (isset($rawResponse['codeDesc']) && $rawResponse['codeDesc'] != 'Success')) {
             $ext = '';
             require_once QCLOUDAPI_ROOT_PATH . '/Common/Error.php';
             if (isset($rawResponse['detail'])) {
@@ -253,10 +267,10 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
         }
 
         unset($rawResponse['code'], $rawResponse['message']);
-
-        if (count($rawResponse))
+        if (count($rawResponse)) {
             return $rawResponse;
-        else
+        } else {
             return true;
+        }
     }
 }

@@ -1,6 +1,7 @@
 <?php
 // 目录入口
 define('QCLOUDAPI_ROOT_PATH', dirname(__FILE__));
+
 /**
  * QcloudApi
  * SDK入口文件
@@ -11,25 +12,25 @@ class QcloudApi
      * MODULE_ACCOUNT
      * 用户账户
      */
-    const MODULE_ACCOUNT   = 'account';
+    const MODULE_ACCOUNT = 'account';
 
     /**
      * MODULE_CVM
      * 云服务器
      */
-    const MODULE_CVM   = 'cvm';
+    const MODULE_CVM = 'cvm';
 
     /**
      * MODULE_CDB
      * CDB数据库
      */
-    const MODULE_CDB   = 'cdb';
+    const MODULE_CDB = 'cdb';
 
     /**
      * MODULE_LB
      * 负载均衡
      */
-    const MODULE_LB    = 'lb';
+    const MODULE_LB = 'lb';
 
     /**
      * MODULE_TRADE
@@ -62,6 +63,12 @@ class QcloudApi
     const MODULE_MONITOR = 'monitor';
 
     /**
+     * MODULE_MONITOR_DISK
+     * 云监控 硬盘
+     */
+    const MODULE_MONITOR_DISK = 'monitorDisk';
+
+    /**
      * MODULE_CDN
      * CDN
      */
@@ -84,12 +91,12 @@ class QcloudApi
      */
     const MODULE_YUNSOU = 'yunsou';
 
-	  /**
+    /**
      * cns
      */
     const MODULE_CNS = 'cns';
 
-	  /**
+    /**
      * wenzhi
      */
     const MODULE_WENZHI = 'wenzhi';
@@ -141,7 +148,7 @@ class QcloudApi
      */
     const MODULE_TDSQL = 'tdsql';
 
-        /**
+    /**
      * MODULE_BM
      * 黑石BM
      */
@@ -234,7 +241,7 @@ class QcloudApi
     /**
      * MODULE_STS
      */
-	const MODULE_STS = "sts";
+    const MODULE_STS = "sts";
 
     /**
      * MODULE_ATHENA
@@ -257,8 +264,8 @@ class QcloudApi
     /**
      * load
      * 加载模块文件
-     * @param  string $moduleName   模块名称
-     * @param  array  $moduleConfig 模块配置
+     * @param  string $moduleName 模块名称
+     * @param  array $moduleConfig 模块配置
      * @return
      */
     public static function load($moduleName, $moduleConfig = array())
