@@ -97,7 +97,7 @@ abstract class QcloudApi_Module_Base extends QcloudApi_Common_Base
                     break;
                 case 'Ext':
                     $this->_ext = $val;
-
+                    break;
                 default:
                     ;
                     break;
