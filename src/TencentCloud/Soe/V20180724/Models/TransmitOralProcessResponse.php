@@ -26,8 +26,14 @@ use TencentCloud\Common\AbstractModel;
  * @method void setPronCompletion(float $PronCompletion) 设置发音完整度，取值范围[0, 1]，当为词模式时，取值无意义；当为流式模式且请求中IsEnd未置1时，取值无意义
  * @method array getWords() 获取详细发音评估结果
  * @method void setWords(array $Words) 设置详细发音评估结果
- * @method string getRequestId() 获取唯一请求ID，每次请求都会返回。定位问题时需要提供该次请求的RequestId。
- * @method void setRequestId(string $RequestId) 设置唯一请求ID，每次请求都会返回。定位问题时需要提供该次请求的RequestId。
+ * @method string getSessionId() 获取语音段唯一标识，一段语音一个SessionId
+ * @method void setSessionId(string $SessionId) 设置语音段唯一标识，一段语音一个SessionId
+ * @method string getAudioUrl() 获取保存语音音频文件下载地址
+ * @method void setAudioUrl(string $AudioUrl) 设置保存语音音频文件下载地址
+ * @method array getSentenceInfoSet() 获取断句中间结果，中间结果是局部最优而非全局最优的结果，所以中间结果有可能和最终整体结果对应部分不一致；中间结果的输出便于客户端UI更新；待用户发音完全结束后，系统会给出一个综合所有句子的整体结果。
+ * @method void setSentenceInfoSet(array $SentenceInfoSet) 设置断句中间结果，中间结果是局部最优而非全局最优的结果，所以中间结果有可能和最终整体结果对应部分不一致；中间结果的输出便于客户端UI更新；待用户发音完全结束后，系统会给出一个综合所有句子的整体结果。
+ * @method string getRequestId() 获取唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
+ * @method void setRequestId(string $RequestId) 设置唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
  */
 
 /**
@@ -56,7 +62,22 @@ class TransmitOralProcessResponse extends AbstractModel
     public $Words;
 
     /**
-     * @var string 唯一请求ID，每次请求都会返回。定位问题时需要提供该次请求的RequestId。
+     * @var string 语音段唯一标识，一段语音一个SessionId
+     */
+    public $SessionId;
+
+    /**
+     * @var string 保存语音音频文件下载地址
+     */
+    public $AudioUrl;
+
+    /**
+     * @var array 断句中间结果，中间结果是局部最优而非全局最优的结果，所以中间结果有可能和最终整体结果对应部分不一致；中间结果的输出便于客户端UI更新；待用户发音完全结束后，系统会给出一个综合所有句子的整体结果。
+     */
+    public $SentenceInfoSet;
+
+    /**
+     * @var string 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
      */
     public $RequestId;
     /**
@@ -64,7 +85,10 @@ class TransmitOralProcessResponse extends AbstractModel
      * @param float $PronFluency 发音流利度，取值范围[0, 1]，当为词模式时，取值无意义；当为流式模式且请求中IsEnd未置1时，取值无意义
      * @param float $PronCompletion 发音完整度，取值范围[0, 1]，当为词模式时，取值无意义；当为流式模式且请求中IsEnd未置1时，取值无意义
      * @param array $Words 详细发音评估结果
-     * @param string $RequestId 唯一请求ID，每次请求都会返回。定位问题时需要提供该次请求的RequestId。
+     * @param string $SessionId 语音段唯一标识，一段语音一个SessionId
+     * @param string $AudioUrl 保存语音音频文件下载地址
+     * @param array $SentenceInfoSet 断句中间结果，中间结果是局部最优而非全局最优的结果，所以中间结果有可能和最终整体结果对应部分不一致；中间结果的输出便于客户端UI更新；待用户发音完全结束后，系统会给出一个综合所有句子的整体结果。
+     * @param string $RequestId 唯一请求 ID，每次请求都会返回。定位问题时需要提供该次请求的 RequestId。
      */
     function __construct()
     {
@@ -96,6 +120,23 @@ class TransmitOralProcessResponse extends AbstractModel
                 $obj = new WordRsp();
                 $obj->deserialize($value);
                 array_push($this->Words, $obj);
+            }
+        }
+
+        if (array_key_exists("SessionId",$param) and $param["SessionId"] !== null) {
+            $this->SessionId = $param["SessionId"];
+        }
+
+        if (array_key_exists("AudioUrl",$param) and $param["AudioUrl"] !== null) {
+            $this->AudioUrl = $param["AudioUrl"];
+        }
+
+        if (array_key_exists("SentenceInfoSet",$param) and $param["SentenceInfoSet"] !== null) {
+            $this->SentenceInfoSet = [];
+            foreach ($param["SentenceInfoSet"] as $key => $value){
+                $obj = new SentenceInfo();
+                $obj->deserialize($value);
+                array_push($this->SentenceInfoSet, $obj);
             }
         }
 

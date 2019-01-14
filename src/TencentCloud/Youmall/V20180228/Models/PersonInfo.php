@@ -26,10 +26,22 @@ use TencentCloud\Common\AbstractModel;
  * @method void setGender(integer $Gender) 设置性别：0男1女
  * @method integer getAge() 获取年龄
  * @method void setAge(integer $Age) 设置年龄
- * @method integer getPersonType() 获取身份类型：0-普通顾客，1~10黑名单，11~20白名单，11店员
- * @method void setPersonType(integer $PersonType) 设置身份类型：0-普通顾客，1~10黑名单，11~20白名单，11店员
+ * @method integer getPersonType() 获取身份类型（0表示普通顾客，1 白名单，2 表示黑名单）
+ * @method void setPersonType(integer $PersonType) 设置身份类型（0表示普通顾客，1 白名单，2 表示黑名单）
  * @method string getPersonPictureUrl() 获取人脸图片Url，在有效期内可以访问下载
  * @method void setPersonPictureUrl(string $PersonPictureUrl) 设置人脸图片Url，在有效期内可以访问下载
+ * @method integer getPersonSubType() 获取身份子类型:
+PersonType=0时(普通顾客)，0普通顾客
+PersonType=1时(白名单)，0店员，1商场人员，2其他类型人员，3区域经理，4注册用户，5VIP用户
+PersonType=2时(黑名单)，0普通黑名单，1小偷)
+ * @method void setPersonSubType(integer $PersonSubType) 设置身份子类型:
+PersonType=0时(普通顾客)，0普通顾客
+PersonType=1时(白名单)，0店员，1商场人员，2其他类型人员，3区域经理，4注册用户，5VIP用户
+PersonType=2时(黑名单)，0普通黑名单，1小偷)
+ * @method integer getVisitTimes() 获取到访次数，-1表示未知
+ * @method void setVisitTimes(integer $VisitTimes) 设置到访次数，-1表示未知
+ * @method integer getVisitDays() 获取到访天数，-1表示未知
+ * @method void setVisitDays(integer $VisitDays) 设置到访天数，-1表示未知
  */
 
 /**
@@ -58,7 +70,7 @@ class PersonInfo extends AbstractModel
     public $Age;
 
     /**
-     * @var integer 身份类型：0-普通顾客，1~10黑名单，11~20白名单，11店员
+     * @var integer 身份类型（0表示普通顾客，1 白名单，2 表示黑名单）
      */
     public $PersonType;
 
@@ -66,13 +78,37 @@ class PersonInfo extends AbstractModel
      * @var string 人脸图片Url，在有效期内可以访问下载
      */
     public $PersonPictureUrl;
+
+    /**
+     * @var integer 身份子类型:
+PersonType=0时(普通顾客)，0普通顾客
+PersonType=1时(白名单)，0店员，1商场人员，2其他类型人员，3区域经理，4注册用户，5VIP用户
+PersonType=2时(黑名单)，0普通黑名单，1小偷)
+     */
+    public $PersonSubType;
+
+    /**
+     * @var integer 到访次数，-1表示未知
+     */
+    public $VisitTimes;
+
+    /**
+     * @var integer 到访天数，-1表示未知
+     */
+    public $VisitDays;
     /**
      * @param integer $PersonId 用户ID
      * @param string $PersonPicture 人脸图片Base64内容，已弃用，返回默认空值
      * @param integer $Gender 性别：0男1女
      * @param integer $Age 年龄
-     * @param integer $PersonType 身份类型：0-普通顾客，1~10黑名单，11~20白名单，11店员
+     * @param integer $PersonType 身份类型（0表示普通顾客，1 白名单，2 表示黑名单）
      * @param string $PersonPictureUrl 人脸图片Url，在有效期内可以访问下载
+     * @param integer $PersonSubType 身份子类型:
+PersonType=0时(普通顾客)，0普通顾客
+PersonType=1时(白名单)，0店员，1商场人员，2其他类型人员，3区域经理，4注册用户，5VIP用户
+PersonType=2时(黑名单)，0普通黑名单，1小偷)
+     * @param integer $VisitTimes 到访次数，-1表示未知
+     * @param integer $VisitDays 到访天数，-1表示未知
      */
     function __construct()
     {
@@ -108,6 +144,18 @@ class PersonInfo extends AbstractModel
 
         if (array_key_exists("PersonPictureUrl",$param) and $param["PersonPictureUrl"] !== null) {
             $this->PersonPictureUrl = $param["PersonPictureUrl"];
+        }
+
+        if (array_key_exists("PersonSubType",$param) and $param["PersonSubType"] !== null) {
+            $this->PersonSubType = $param["PersonSubType"];
+        }
+
+        if (array_key_exists("VisitTimes",$param) and $param["VisitTimes"] !== null) {
+            $this->VisitTimes = $param["VisitTimes"];
+        }
+
+        if (array_key_exists("VisitDays",$param) and $param["VisitDays"] !== null) {
+            $this->VisitDays = $param["VisitDays"];
         }
     }
 }
